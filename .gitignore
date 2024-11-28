@@ -1,0 +1,8 @@
+*.ipynb
+linkedin_scraper_public.py
+*_soup.txt
+*credentials.txt
+*.xlsx
+.ipynb_checkpoints
+.DS_Store
+.env
