@@ -7,3 +7,4 @@ linkedin_scraper_public.py
 .ipynb_checkpoints
 .DS_Store
 .env
+.venv
