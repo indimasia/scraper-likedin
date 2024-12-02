@@ -24,7 +24,7 @@ username = os.getenv("LINKEDIN_USERNAME")
 password = os.getenv("LINKEDIN_PASSWORD")
 
 # Set LinkedIn page URL for scraping
-page = 'https://www.linkedin.com/in/cahyosaputro/'
+page = ''
 
 # Initialize WebDriver for Chrome
 browser = webdriver.Chrome()
