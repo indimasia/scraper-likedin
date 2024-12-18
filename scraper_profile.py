@@ -175,17 +175,20 @@ except Exception as e:
 
 # Extract the "featured" section
 try:
-    # Cari elemen "Featured" berdasarkan struktur HTML
-    featured_container = linkedin_soup.find("div", {"class": "pvs-header__left-container--stack"})
+    # Find the "Featured" section container
+    featured_container = linkedin_soup.find("div", {"class": "artdeco-carousel__content"})
+    featured_links = []
+
     if featured_container:
-        # Pastikan teksnya sesuai dengan "Difiturkan" (Featured)
-        featured_title = featured_container.find("span", {"aria-hidden": "true"}).get_text(strip=True)
-        if "Difiturkan" in featured_title:
-            featured = featured_title
-        else:
-            featured = ""
+        # Find all links within the "Featured" section
+        links = featured_container.find_all("a", {"class": "optional-action-target-wrapper"})
+        for link in links:
+            href = link.get("href", "")
+            featured_links.append(href)
     else:
-        featured = ""
+        featured_links = []
+
+    featured = " | ".join(featured_links) if featured_links else ""
     print('Featured:', featured)
 except Exception as e:
     print(f"Error extracting featured section: {e}")
@@ -208,24 +211,14 @@ try:
         job_title_elem = container.find("span", {"aria-hidden": "true"})
         job_title = job_title_elem.get_text(strip=True) if job_title_elem else ""
 
-        # Ambil nama perusahaan
-        company_elem = container.find("span", {"aria-hidden": "true"})
-        company = company_elem.get_text(strip=True) if company_elem else ""
-
         # Ambil durasi kerja
         duration_elem = container.find("span", {"class": "pvs-entity__caption-wrapper"})
         duration = duration_elem.get_text(strip=True) if duration_elem else ""
 
-        # Ambil lokasi
-        location_elem = container.find("span", {"aria-hidden": "true"})
-        location = location_elem.get_text(strip=True) if location_elem else ""
-
         # Tambahkan data ke daftar pengalaman
         experiences.append({
             "Job Title": job_title,
-            "Company": company,
             "Duration": duration,
-            "Location": location
         })
 
     # Tampilkan hasil pengalaman yang ditemukan
@@ -258,10 +251,6 @@ try:
         institution_elem = container.find("span", {"aria-hidden": "true"})
         institution = institution_elem.get_text(strip=True) if institution_elem else ""
 
-        # Ambil gelar pendidikan dan jurusan
-        degree_elem = container.find("span", {"aria-hidden": "true"})
-        degree = degree_elem.get_text(strip=True) if degree_elem else ""
-
         # Ambil durasi pendidikan (tahun masuk dan lulus)
         duration_elem = container.find("span", {"class": "pvs-entity__caption-wrapper"})
         duration = duration_elem.get_text(strip=True) if duration_elem else ""
@@ -269,7 +258,6 @@ try:
         # Tambahkan data ke daftar pendidikan
         educations.append({
             "Institution": institution,
-            "Degree": degree,
             "Duration": duration
         })
 
@@ -297,14 +285,10 @@ try:
         {"Attribute": "Featured", "Value": featured},
     ]
 
-    posts_data.append({"Attribute": "Experiences", "Value": experiences})
+    posts_data.append({"Attribute": "Experiences and volunteering", "Value": experiences})
 
-    posts_data.append({"Attribute": "Education", "Value": educations})
+    posts_data.append({"Attribute": "Education, interest companies, and interest groups", "Value": educations})
 
-    # for education in educations:
-    #     education_str = f"{education['Degree']} from {education['Institution']} ({education['Duration']})"
-    #     posts_data.append({"Attribute": "Education", "Value": education_str})
-    
     # Konversi ke DataFrame
     df = pd.DataFrame(posts_data)
 
