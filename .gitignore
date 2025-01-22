@@ -1,0 +1,10 @@
+*.ipynb
+linkedin_scraper_public.py
+*_soup.txt
+*credentials.txt
+*.xlsx
+*.csv
+.ipynb_checkpoints
+.DS_Store
+.env
+.venv
